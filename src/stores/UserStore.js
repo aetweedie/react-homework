@@ -2,7 +2,6 @@ import { EventEmitter } from 'events';
 import AppDispatcher from '../Dispatcher';
 
 let state = {
-  loaded: false,
   users: []
 };
 
@@ -23,7 +22,6 @@ let UserStore = {
 };
 
 UserStore.dispatchToken = AppDispatcher.register((action) => {
-  console.warn(action.type + ' UserStore.js');
   if (action.type === 'USERS_LOADED') {
     setState({
       users: action.users

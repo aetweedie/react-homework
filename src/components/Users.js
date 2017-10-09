@@ -7,8 +7,9 @@ class Users extends Component {
   constructor() {
     super();
     this.state = UserStore.getState();
-    this.handleChange = this.handleChange.bind(this);
+    console.log(this.state);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -16,40 +17,53 @@ class Users extends Component {
     UserActionCreators.loadUsers();
   }
 
-  handleChange() {
-    this.setState(UserStore.getState());
-  }
-
-  handleSubmit(e) {
-    let name;
-    console.log(this.state.value);
-    this.setState({[name]: e.target.value});
-    e.preventDefault();
-  }
-
   showUsers() {
-    return this.state.users.map((user) => {
-      if (user) {
-        return <div><li>{user.firstName} {user.lastName} {user.address}</li><button>Delete User</button><button>Update User</button></div>;
+    return this.state.users.map((users) => {
+      if (users) {
+        return <div><li>{users.firstName} {users.lastName} {users.address}</li><button>Delete User</button><button>Update User</button></div>;
       } else {
         return;
       }
     });
   }
 
+  handleChange(e) {
+    if (e) {
+        e.preventDefault();
+        let users = this.state.users;
+        let name = e.target.name;
+        let value = e.target.value;
+
+        users[name] = value;
+
+        UserStore.setState({users})
+    }
+  }
+
+  handleSubmit(e) {
+    this.setState({value: this.state.users});
+    e.preventDefault();
+    console.log(this.state);
+  }
+
   render() {
     return (
       <div>
-        <h1>User list</h1>
-        <ul>{this.showUsers()}</ul>
-        <div>
-          <form name='user' onSubmit={this.handleSubmit}>
-            <input type='text' name='firstName' value={name.firstName} onChange={this.handleChange} />
-            <input type='text' name='lastName' value={user.lastName} onChange={this.handleChange} />
-            <input type='text' name='address' value={user.address} onChange={this.handleChange} />
-            <input type='submit' value='Add a new user'/>
-          </form>
-        </div>
+        <div className="page-content">
+          <div className="header">
+            <h1>List of Users</h1>
+          </div>
+          <ul>{this.showUsers()}</ul>
+          <div>
+            <form name='user' onSubmit={this.handleSubmit} className="input-box">
+              <input type='text' name='firstName' value={this.state.users["firstName"]} placeholder="First Name"/>
+              <input type='text' name='lastName' value={this.state.users["lastName"]} placeholder="Last Name"/>
+              <input type='text' name='address' value={this.state.users["address"]} placeholder="Address"/>
+              <input type='submit' value='Add a new user'/>
+            </form>
+          </div>
+      </div>
+        <footer>Written by Alan Tweedie</footer>
       </div>
     );
   }

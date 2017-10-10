@@ -7,7 +7,7 @@ class Users extends Component {
   constructor() {
     super();
     this.state = UserStore.getState();
-    console.log(this.state);
+    console.log(this.state + ' this.state');
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -20,7 +20,7 @@ class Users extends Component {
   showUsers() {
     return this.state.users.map((users) => {
       if (users) {
-        return <div><li>{users.firstName} {users.lastName} {users.address}</li><button>Delete User</button><button>Update User</button></div>;
+        return <div><li>{users.firstName} {users.lastName} {users.address}</li><button onClick={this.handleDelete()}>Delete User</button><button onClick={this.updateData()}>Update User</button></div>;
       } else {
         return;
       }
@@ -35,15 +35,22 @@ class Users extends Component {
         let value = e.target.value;
 
         users[name] = value;
-
-        UserStore.setState({users})
+        console.log(users + ' users');
     }
   }
 
+  updateData(users) {
+    this.state.users.splice(users, 1);
+  }
+
   handleSubmit(e) {
-    this.setState({value: this.state.users});
     e.preventDefault();
-    console.log(this.state);
+    console.log(this.state.users);
+    //UserStore.setState({this.state.users});
+  }
+
+  handleDelete(users) {
+    UserStore.updateData(users);
   }
 
   render() {
@@ -56,9 +63,9 @@ class Users extends Component {
           <ul>{this.showUsers()}</ul>
           <div>
             <form name='user' onSubmit={this.handleSubmit} className="input-box">
-              <input type='text' name='firstName' value={this.state.users["firstName"]} placeholder="First Name"/>
-              <input type='text' name='lastName' value={this.state.users["lastName"]} placeholder="Last Name"/>
-              <input type='text' name='address' value={this.state.users["address"]} placeholder="Address"/>
+              <input type='text' name='firstName' value={this.state.users["firstName"]} onChange={this.handleChange.bind(this)} placeholder="First Name"/>
+              <input type='text' name='lastName' value={this.state.users["lastName"]} onChange={this.handleChange.bind(this)} placeholder="Last Name"/>
+              <input type='text' name='address' value={this.state.users["address"]} onChange={this.handleChange.bind(this)} placeholder="Address"/>
               <input type='submit' value='Add a new user'/>
             </form>
           </div>

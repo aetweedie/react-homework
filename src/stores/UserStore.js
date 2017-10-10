@@ -2,7 +2,8 @@ import { EventEmitter } from 'events';
 import AppDispatcher from '../Dispatcher';
 
 let state = {
-  users: []
+  users: [],
+  newUser: {}
 };
 
 let events = new EventEmitter();

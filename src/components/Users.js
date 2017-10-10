@@ -7,12 +7,11 @@ class Users extends Component {
   constructor() {
     super();
     this.state = UserStore.getState();
-    console.log(this.state + ' this.state');
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     UserStore.addChangeListener(this.handleChange);
     UserActionCreators.loadUsers();
   }
@@ -20,7 +19,7 @@ class Users extends Component {
   showUsers() {
     return this.state.users.map((users) => {
       if (users) {
-        return <div><li>{users.firstName} {users.lastName} {users.address}</li><button onClick={this.handleDelete()}>Delete User</button><button onClick={this.updateData()}>Update User</button></div>;
+        return (<li key={users.firstName + users.lastName}>{users.firstName} {users.lastName} {users.address}<button onClick={this.handleDelete()}>Delete User</button><button onClick={this.updateData()}>Update User</button></li>);
       } else {
         return;
       }
@@ -34,8 +33,7 @@ class Users extends Component {
         let name = e.target.name;
         let value = e.target.value;
 
-        users[name] = value;
-        console.log(users + ' users');
+        this.state.newUser[name] = value;
     }
   }
 
@@ -45,12 +43,18 @@ class Users extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.users);
-    //UserStore.setState({this.state.users});
+    if (this.state.newUser.firstName && this.state.newUser.lastName && this.state.newUser.address) {
+      let users = this.state.users;
+      users.push(this.state.newUser);
+      this.setState({
+        users: users,
+        newUser: {},
+      });
+    }
   }
 
   handleDelete(users) {
-    UserStore.updateData(users);
+    this.updateData(users);
   }
 
   render() {
@@ -70,7 +74,7 @@ class Users extends Component {
             </form>
           </div>
       </div>
-        <footer>Written by Alan Tweedie</footer>
+        <footer>Written by Alan Tweedie   </footer>
       </div>
     );
   }

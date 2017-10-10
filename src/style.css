@@ -4,9 +4,9 @@
 
 .header {
   color: white;
-  background-color: black;
+  background-color: #48C1C1;
   height: 100%;
-  border: 1px solid black
+  border: 1px solid #48C1C1;
 }
 
 .header > h1 {
@@ -28,7 +28,7 @@ input {
 }
 
 footer {
-  background: black;
+  background: #48C1C1;
   color: white;
   position: absolute;
   left: 0;
